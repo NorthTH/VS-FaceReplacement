@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="FaceReplacement.FaceContour"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" MouseLeave="UserControl_MouseLeave">
+    <UserControl.Resources>
+        <Storyboard x:Key="OpenEditingMode">
+            <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Contour" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.2500000" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="EditingMarks" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.2500000" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseEditingMode" Completed="CloseEditingMode_Storyboard_Completed">
+            <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Contour" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.2500000" Value="{x:Static Visibility.Hidden}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="EditingMarks" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.2500000" Value="{x:Static Visibility.Hidden}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ContourHilightColorAnimation" RepeatBehavior="Forever">
+            <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Contour" Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)">
+                <SplineColorKeyFrame KeyTime="00:00:00" Value="White"/>
+                <SplineColorKeyFrame KeyTime="00:00:00.5000000" Value="Black"/>
+                <SplineColorKeyFrame KeyTime="00:00:01" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+    <Canvas>
+        <Polygon Name="Contour" Stroke="Black" Fill="Transparent" MouseUp="Contour_MouseUp" PreviewMouseLeftButtonDown="Contour_PreviewMouseLeftButtonDown" MouseMove="Contour_MouseMove" Visibility="Hidden" />
+        <Canvas x:Name="EditingMarks" Visibility="Hidden">
+            <Ellipse x:Name="LeftEye" Width="9" Height="9" IsHitTestVisible="False"/>
+            <Ellipse x:Name="RightEye" Width="9" Height="9" IsHitTestVisible="False"/>
+            <Ellipse x:Name="Mouth" Width="9" Height="9" IsHitTestVisible="False"/>
+            <Canvas x:Name="thumbsLayer"/>
+            <Grid x:Name="RotateCenter" Width="25" Height="25">
+                <Ellipse IsHitTestVisible="False" >
+                    <Ellipse.Fill>
+                        <RadialGradientBrush>
+                            <GradientStop Offset="0.5"/>
+                            <GradientStop Color="#7FFF0000" Offset="0.5"/>
+                            <GradientStop Offset="1"/>
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <Image x:Name="RotateArrow" Source="{DynamicResource rotate}" IsHitTestVisible="False"/>
+                <Image x:Name="TranslateArrow" Source="{DynamicResource translate}" IsHitTestVisible="False"/>
+            </Grid>
+        </Canvas>
+    </Canvas>
+</UserControl>

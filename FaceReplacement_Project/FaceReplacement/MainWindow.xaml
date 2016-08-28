@@ -1,0 +1,298 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:FaceReplacement" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="FaceReplacement.MainWindow"
+    SizeChanged="Window_SizeChanged" Title="Face Replacement" MinHeight="480" MinWidth="640" mc:Ignorable="d" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Background="{x:Null}" Icon="Resources/fr.ico">
+    <Window.Resources>
+        <ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
+            <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+        </ItemsPanelTemplate>
+        <Style x:Key="ListBoxItemStyle1" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment"
+                    Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="VerticalContentAlignment"
+                    Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="Padding" Value="2,0,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border x:Name="Bd"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="{TemplateBinding Padding}" CornerRadius="4" Opacity="0.75"/>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              Margin="8"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                <Setter Property="Background" TargetName="Bd">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Offset="0"
+                                                Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}"/>
+                                            <GradientStop Offset="1"
+                                                Color="{DynamicResource {x:Static SystemColors.HotTrackColorKey}}"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="true"/>
+                                    <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                <Setter Property="Background" TargetName="Bd">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlDarkDarkColorKey}}" Offset="0"/>
+                                            <GradientStop Color="#FFD4D0C8" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Effect" TargetName="Bd">
+                                    <Setter.Value>
+                                        <DropShadowEffect Opacity="0"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ListBoxStyle1" TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <Border x:Name="Bd" SnapsToDevicePixels="true" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" Padding="4" CornerRadius="4">
+                            <ScrollViewer Padding="{TemplateBinding Padding}" Focusable="false">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd"
+                                        Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Storyboard x:Key="OpenPreferences">
+            <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PreferencePanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.0000000" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PreferencePanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ClosePreferences">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PreferencePanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PreferencePanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.2500000" Value="{x:Static Visibility.Hidden}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="OpenHelp">
+            <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HelpPanel"  Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.0000000" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HelpPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseHelp">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HelpPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HelpPanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.2500000" Value="{x:Static Visibility.Hidden}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CollectFacesBlink" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="CollectFacesHereLabel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:02" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:04" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:06" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:08" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="PlacePhotosBlink" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PlacePhotosHereLabel" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:02" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:04" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:06" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:08" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="TimeTakenDisplay"/>
+    </Window.Resources>
+    <Border Name="TranslucentBackground" CornerRadius="4">
+        <Grid Name="MainLayout">
+            <Border x:Name="ToolBar" VerticalAlignment="Top" Height="40">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}" Offset="0"/>
+                        <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="8">
+                        <Button x:Name="OpenFileButton" Click="OpenButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/openfile.png" Margin="0,0,4,0"/>
+                                <TextBlock>Open File</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="OpenCameraButton" Click="OpenCameraButton_Click" Margin="4,0,0,0" Width="100.883333333333">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/openwebcam.png" Margin="0,0,4,0"/>
+                                <TextBlock>Open Camera</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel  HorizontalAlignment="Right" Orientation="Horizontal" Margin="8">
+                        <Button x:Name="OpenPreferenceButton" Click="PreferenceButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/option.png" Margin="0,0,4,0"/>
+                                <TextBlock>Options</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="HelpButton" Margin="4,0,0,0" Click="HelpButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/help.png" Margin="0,0,4,0"/>
+                                <TextBlock>Help</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Grid x:Name="WorkingSpaceGrid" Margin="8,40,8,8" >
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="128"/>
+                </Grid.RowDefinitions>
+                <ListBox x:Name="PhotoListBox" ItemsPanel="{DynamicResource ItemsPanelTemplate1}" Drop="PhotoListBox_Drop"
+    			ItemContainerStyle="{DynamicResource ListBoxItemStyle1}"
+    			ScrollViewer.CanContentScroll="False" AllowDrop="True" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                <TextBlock x:Name="PlacePhotosHereLabel" VerticalAlignment="Center" FontFamily="Segoe UI" FontSize="32" Text="drop photos here" TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" Opacity="0" IsHitTestVisible="False">
+    			<TextBlock.Effect>
+    				<DropShadowEffect ShadowDepth="0" BlurRadius="8"/>
+    			</TextBlock.Effect>
+                </TextBlock>
+                <ListBox x:Name="FaceListBox" Drop="FaceListBox_Drop" AllowDrop="True"
+    			MinWidth="536" MinHeight="128" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}"
+    			ItemsPanel="{DynamicResource ItemsPanelTemplate1}" Style="{DynamicResource ListBoxStyle1}"
+    			ScrollViewer.CanContentScroll="False" Grid.Row="1" DragEnter="FaceListBox_DragEnter" DragLeave="FaceListBox_DragLeave">
+                    <ListBox.BorderBrush>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop/>
+                            <GradientStop Color="White" Offset="1"/>
+                        </LinearGradientBrush>
+                    </ListBox.BorderBrush>
+                    <ListBox.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#AFFFFFFF" Offset="1"/>
+                            <GradientStop Color="#6FFFFFFF" Offset="0.8"/>
+                            <GradientStop Color="#3FFFFFFF" Offset="0.5"/>
+                            <GradientStop Color="#0FFFFFFF" Offset="0.5"/>
+                            <GradientStop Color="#7FFFFFFF"/>
+                        </LinearGradientBrush>
+                    </ListBox.Background>
+                </ListBox>
+                <TextBlock x:Name="CollectFacesHereLabel" Text="drop faces here" TextWrapping="Wrap" FontSize="32" FontFamily="Segoe UI" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Opacity="0" IsHitTestVisible="False">
+    			<TextBlock.Effect>
+    				<DropShadowEffect ShadowDepth="0"/>
+    			</TextBlock.Effect>
+                </TextBlock>
+                <Border x:Name="GlassShine" Grid.Row="1" BorderThickness="1" CornerRadius="4" IsHitTestVisible="False" Margin="2">
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#7FFFFFFF"/>
+                            <GradientStop Color="#21FFFFFF" Offset="0.5"/>
+                            <GradientStop Color="#00FFFFFF" Offset="0.5"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+            </Grid>
+            <Border x:Name="PreferencePanel" Margin="0,33,65,0" CornerRadius="4" HorizontalAlignment="Right" Width="180" Background="#CCFFFFFF" Padding="8" VerticalAlignment="Top" Height="136" Visibility="Hidden">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="24"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock HorizontalAlignment="Right" Grid.Row="0" Text="Speed" TextWrapping="Wrap"/>
+                    <Slider x:Name="TuneSlider" BorderThickness="4,0" Grid.Column="1" Grid.Row="0" ValueChanged="TuneSlider_ValueChanged" IsSnapToTickEnabled="True" Maximum="1" />
+                    <TextBlock Grid.Row="0" Text="Quality" TextWrapping="Wrap" Grid.Column="2"/>
+                    <CheckBox x:Name="AdjustColorCheckBox" Grid.ColumnSpan="3" Grid.Row="1" Click="AdjustColorCheckBox_Click" Content="adjust color" IsChecked="True" />
+                    <CheckBox x:Name="PreserveContrastCheckBox" Grid.Row="2" Grid.ColumnSpan="3" d:LayoutOverrides="Height" Click="PreserveContrastCheckBox_Click" Content="preserve contrast" IsChecked="True" />
+                    <CheckBox x:Name="LabCheckBox" Grid.ColumnSpan="3" Grid.Row="3" Click="LabCheckBox_Click">use Lαβ color space</CheckBox>
+                    <CheckBox x:Name="LuminanceCheckBox" Grid.ColumnSpan="3" Grid.Row="4" Click="LuminanceCheckBox_Click" Content="adjust only luminance" Visibility="Hidden" />
+                </Grid>
+            </Border>
+            <Grid Name="HelpPanel" Background="Black" Visibility="Hidden">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid x:Name="HelpToolBar" >
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlLightLightColorKey}}" Offset="0"/>
+                            <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="8">
+                        <Button x:Name="PreviousHelp" Click="PreviousHelp_Click">
+                            <Path Stretch="Fill" StrokeLineJoin="Round"  Width="24" Height="16" Fill="{Binding Foreground, ElementName=PreviousHelp, Mode=Default}" Data="F1 M 122.607,41.0414L 132.878,41.0414C 133.751,41.0414 134.459,41.7876 134.459,42.708L 134.459,44.3747C 134.459,45.2951 133.751,46.0414 132.878,46.0414L 122.607,46.0414L 122.607,50.208L 117.866,46.8747L 113.125,43.5414L 117.866,40.208L 122.607,36.8747L 122.607,41.0414 Z "/>
+                        </Button>
+                        <Button x:Name="NextHelp" Click="NextHelp_Click" Margin="4,0,0,0">
+                            <Path Stretch="Fill" StrokeLineJoin="Round"  Width="24" Height="16" Fill="{Binding Foreground, ElementName=NextHelp, Mode=Default}" Data="F1 M 73.6438,46.0413L 63.3727,46.0413C 62.5,46.0413 61.7925,45.2951 61.7925,44.3747L 61.7925,42.708C 61.7925,41.7876 62.5,41.0413 63.3727,41.0413L 73.6438,41.0413L 73.6438,36.8747L 78.3843,40.208L 83.1248,43.5413L 78.3843,46.8747L 73.6438,50.208L 73.6438,46.0413 Z "/>
+                        </Button>
+                    </StackPanel>
+                    <Button Click="CloseHelpButton_Click" HorizontalAlignment="Right" Margin="8">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{DynamicResource help}" Margin="0,0,4,0"/>
+                            <TextBlock>Help</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <Image x:Name="HelpContent" Grid.Row="1" Source="{DynamicResource h1}"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

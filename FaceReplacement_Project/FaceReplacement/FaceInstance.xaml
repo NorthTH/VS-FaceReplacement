@@ -1,0 +1,91 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:FaceReplacement"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="userControl"
+    x:Class="FaceReplacement.FaceInstance"
+    mc:Ignorable="d"
+    RenderTransformOrigin="0.5,0.5"
+    PreviewMouseLeftButtonDown="UserControl_PreviewMouseLeftButtonDown"
+    MouseMove="UserControl_MouseMove" Drop="UserControl_Drop" MouseUp="UserControl_MouseUp"
+    MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave"
+    MouseDoubleClick="UserControl_MouseDoubleClick"
+    DragEnter="userControl_DragEnter" DragLeave="userControl_DragLeave" DragOver="userControl_DragOver"
+    ><!--Width="{Binding Width, ElementName=FaceImage, Mode=Default}"
+    Height="{Binding Height, ElementName=FaceImage, Mode=Default}"-->
+    <UserControl.Resources>
+        <Storyboard x:Key="WaitingRingRotate" RepeatBehavior="Forever">
+            <PointAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="path"
+                                          Storyboard.TargetProperty="(Shape.Fill).(LinearGradientBrush.StartPoint)">
+                <SplinePointKeyFrame KeyTime="00:00:00" Value="0.146,0.146"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.1000000" Value="0.5,0"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.2000000" Value="0.854,0.146"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.3000000" Value="1,0.5"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.4000000" Value="0.854,0.854"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.5000000" Value="0.5,1"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.6000000" Value="0.146,0.854"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.7000000" Value="0,0.5"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.8000000" Value="0.146,0.146"/>
+            </PointAnimationUsingKeyFrames>
+            <PointAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="path"
+                                          Storyboard.TargetProperty="(Shape.Fill).(LinearGradientBrush.EndPoint)">
+                <SplinePointKeyFrame KeyTime="00:00:00" Value="0.854,0.854"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.1000000" Value="0.5,1"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.2000000" Value="0.146,0.854"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.3000000" Value="0,0.5"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.4000000" Value="0.146,0.146"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.5000000" Value="0.5,0"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.6000000" Value="0.854,0.146"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.7000000" Value="1,0.5"/>
+                <SplinePointKeyFrame KeyTime="00:00:00.8000000" Value="0.854,0.854"/>
+            </PointAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard x:Name="WaitingRingRotate_BeginStoryboard"
+                             Storyboard="{StaticResource WaitingRingRotate}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="FrameworkElement.Unloaded">
+            <RemoveStoryboard BeginStoryboardName="WaitingRingRotate_BeginStoryboard"/>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <Grid>
+        <Canvas>
+            <Image x:Name="FaceImage" Source="{Binding Thumbnail}"
+                   DataContextChanged="FaceImage_DataContextChanged"/>
+            <local:FaceContour x:Name="Contour"
+			BoundaryWidth="{Binding ActualWidth, ElementName=userControl, Mode=Default}"
+			BoundaryHeight="{Binding ActualHeight, ElementName=userControl, Mode=Default}" />
+        </Canvas>
+        <Button x:Name="CloseButton" HorizontalAlignment="Right" VerticalAlignment="Top"
+                Width="16" Height="16" Click="CloseButton_Click" Margin="0,0,-1,0" Visibility="Hidden">
+            <Image Source="{DynamicResource remove}"/>
+        </Button>
+        <Grid x:Name="WaitingLayer" MinHeight="96" MinWidth="96" Visibility="Hidden"
+              Width="{Binding ActualWidth, ElementName=FaceImage, Mode=Default}"
+              Height="{Binding ActualHeight, ElementName=FaceImage, Mode=Default}">
+            <Border Background="#7F000000" BorderThickness="1" CornerRadius="4"/>
+            <Path x:Name="path" Stretch="Fill" Margin="8">
+                <Path.Data>
+                    <PathGeometry>
+                        <PathFigure IsClosed="True" StartPoint="32,8.5">
+                            <PolyBezierSegment Points="19.021309,8.5 8.5,19.021309 8.5,32 8.5,44.978691 19.021309,55.5 32,55.5 44.978691,55.5 55.5,44.978691 55.5,32 55.5,19.021309 44.978691,8.5 32,8.5"/>
+                        </PathFigure>
+                        <PathFigure IsClosed="True" StartPoint="32,0.5">
+                            <PolyBezierSegment Points="49.396969,0.5 63.5,14.60303 63.5,32 63.5,49.396969 49.396969,63.5 32,63.5 14.60303,63.5 0.5,49.396969 0.5,32 0.5,14.60303 14.60303,0.5 32,0.5"/>
+                        </PathFigure>
+                    </PathGeometry>
+                </Path.Data>
+                <Path.Fill>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#0033FF00" Offset="0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                        <GradientStop Color="#6B6BFF6B" Offset="0.711"/>
+                    </LinearGradientBrush>
+                </Path.Fill>
+            </Path>
+        </Grid>
+    </Grid>
+</UserControl>
