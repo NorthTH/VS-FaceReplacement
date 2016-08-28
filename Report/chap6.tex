@@ -1,0 +1,43 @@
+\chapter{CONCLUSIONS}\label{chap:CONCLUSIONS}
+\hspace{0.5in}This chapter describes the benefits, problems and limitations of the Face Replacement System. It also describes future works which can extend the research.
+
+\section{Benefits}
+
+\subsection{Benefits to Project Developers}
+\begin{itemize}
+\item To learn and practice C\# language on .NET Framework.
+\item To learn about OpenCV library and understand the concept of face detection.
+\item To practice and apply the knowledge from Computer Graphics class.
+\item To practice and apply the concept of color adjustment technique; Color Transfer between Images, in a new way.
+\item To understand the concept of blending techniques; Poisson Cloning, and the state of the art technique; Mean-Value Coordinate Cloning.
+\item To learn and practice how to create a modern design of user interface by using Windows Presentation Foundation.
+\end{itemize}
+
+\subsection{Benefits to Users}
+\begin{itemize}
+\item To help users reduce the required time for face editing and to easily get realistic face images.
+\item To be able to do face de-identification in order to do privacy protection that is more pleasing than using a mosaic on the face.
+\item To be able to do try-on on various dressings with their face identity.
+\item To be able to put a user's face into the event or the photograph of a location where they will never be again.
+\end{itemize}
+
+\section{Problems and Limitations}
+\begin{itemize}
+\item The face images which will be used in the system should be in-plane pose, not with out-of-plane pose, because our system can only deal with 2D operations. The in-plane pose should not be extreme because the face detector might not be able to detect the face.
+\item The face images should not be blocked by any obstruction, i.e. no wearing glasses, no hair covering the face, etc.
+\item The images which have the extreme difference of lighting condition on each face might get unsatisfied results, i.e. different direction of light projected on the face, extreme different color dynamics or contrast, etc.
+\item The system is not fast enough to run with real-time video stream. One of the reasons is C\# language is a high-level language which has a high overhead.
+\item Although the system can run on 64-bit version of Windows, it is not a true 64-bit application because OpenCV is implemented as 32-bit.
+\item The system still cannot achieve 100\% accuracy on face detection because of some circumstances such as a too-small size of face, eyes are too small, etc. which also affects the correctness of face contour creation process.
+\item Due to the limitation of 32-bit addressing scheme, the linear solver cannot deal with a matrix larger than 65536${\times}$65536 elements. This means that when applying the Poisson blending method, the total pixels of the face should not be more than 65536 pixels or approximately 256${\times}$256 pixels.
+\item A machine that has a low performance graphics processor might experience a slow response and jaggedness on user interface rendering.
+\end{itemize}
+
+\section{Future Works}
+\begin{itemize}
+\item To develop the system to be able to replace faces between images with out-of-plane posture by 3D operation.
+\item To develop the system to be able to process in real time such as in a video stream.
+\item To develop the system to have fully automatic face contour editing not to cross any face features.
+\item To develop the system so that it is tolerant of obstruction on the face region, i.e. hair, glasses, etc.
+\item To develop the system to be able to replace each face feature; eyes, nose, and mouth separately.
+\end{itemize} 

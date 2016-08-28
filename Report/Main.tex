@@ -1,0 +1,183 @@
+%ICT Senior Project  Template
+%Faculty of Information and Communication Technology, Mahidol University
+%Author: Kanrawi K.
+%Last updated  date: 26 Oct 09
+%
+%==================================Header Zone==================================
+% defining template file ict.doc
+\documentclass[natbib]{ictdoc}
+
+% importing packages
+\usepackage[english, thai]{babel}
+\usepackage{thswitch}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{rotating}
+\usepackage{url}
+\usepackage{subfig}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\bfig}{\begin{figure}}
+\newcommand{\efig}{\end{figure}}
+\newcommand{\bfa}{\left\{\begin{array}}
+\newcommand{\efa}{\end{array}\right.}
+\renewcommand\textfraction{.01}
+\setcounter{totalnumber}{9}
+\setlength{\floatsep}{1cm}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+\renewcommand{\arraystretch}{1.5}
+
+%Subsection Reformatted
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+{-3.5ex \@plus -1ex \@minus -.2ex}{2.3ex \@plus .2ex}{\Large\bf}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+{-3.25ex \@plus -1ex \@minus -.2ex}{1.5ex \@plus .2ex}{\large\bf}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+{-3.25ex \@plus -1ex \@minus -.2ex}{1.5ex \@plus .2ex}{\normalsize\bf}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+{3.25ex \@plus 1ex \@minus .2ex}{-1em}{\normalsize\bf}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{4}{\parindent}%
+{3.25ex \@plus 1ex \@minus .2ex}{-1em}{\normalsize\bf}}
+\makeatother
+
+%===============================================================================
+
+
+% importing pictures from  folders
+\graphicspath{{./figures/chap1/}{./figures/chap2/}{./figures/chap3/}{./figures/chap4/}{./figures/chap5/}{./figures/appendix/}}
+
+
+% information for front page
+%-----------------------------------------------------------------------------
+\title{Automatic Face Replacement in Photographs}
+\thaititle{การเปลี่ยนหน้าอัตโนมัติในรูปถ่าย}
+
+
+% candidate, candidatetwo, candidatethree must be present
+\candidatename{Jirayus}
+\candidatenametwo{Worachet}
+\candidatenamethree{Damri}
+
+\candidatesurname{Laemthong}
+\candidatesurnametwo{Sae-lim}
+\candidatesurnamethree{Samretwit}
+
+% Name of students in short form such as Harry P. or H. Potter
+\candidateshort{Jirayus L.}
+\candidateshorttwo{Worachet S.}
+\candidateshortthree{Damri S.}
+
+\degree{B.Sc.}
+\subject{Information and Communication Technology}
+\subjectshort{ICT}
+
+\submissionyear{2010}
+
+\candidatetitle{Mr.\ }
+\candidatetitletwo{Mr.\ }
+\candidatetitlethree{Mr.\ }
+
+\majoradvisor{DR. RAWESAK TANAWONGSUWAN}
+
+
+% information for page iv (ABSTRACT)
+%-----------------------------------------------------------------------------
+\candidatenumber{4988089}
+\candidatenumbertwo{4988275}
+\candidatenumberthree{4988277}
+\candidatefaccode{SCIT/B}
+
+\keywords{Face Replacement / Seamless Cloning / }
+\keywordsII{Image-Based Rendering / Computational Photography}
+\keywordsIII{}
+
+
+% information for page v (THAI ABSTRACT)
+%-----------------------------------------------------------------------------
+\thaisubject{}
+\thaicandidatefullname{จิรายุส แหลมทอง}
+\thaicandidatefullnametwo{วรเชษฐ์ แซ่ลิ้ม}
+\thaicandidatefullnamethree{ดำริห์ สำเร็จวิทย์}
+
+\thaimajoradvisor{ดร. รวีศักดิ์ ธนวงศ์สุวรรณ}
+
+
+% information for Biography
+%-----------------------------------------------------------------------------
+
+% for the first member
+\dateofbirth{22 March 1988}
+\placeofbirth{Chaing Mai, Thailand}
+\firstdegree{High School Diploma}
+\firstdegreeinstitution{Nawamintrachinutit Satriwitthaya Putthamonthon\\\hspace{6.8cm}School}
+\firstdegreeyears{2006} % use  the graduated year of previous school not the academic year
+\years{2010}                      % use  the graduated year not the academic year
+
+% In case of  too long school name use double slash(//) to go to new line
+% And use "\hspace{7cm}" to do indentation
+%  Example
+%\firstdegreeinstitutionthree{SchoolNameCNawamintrachinutit Satriwitthaya Putthamonthon \\ %\hspace{7cm}School}
+
+% for the second member
+
+\dateofbirthtwo{10 November 1987}
+\placeofbirthtwo{Bangkok, Thailand}
+\firstdegreetwo{High School Diploma}
+\firstdegreeinstitutiontwo{Wat Nuannoradit School}
+\firstdegreeyearstwo{2006}
+\yearstwo{2010}
+
+
+% for the third member
+\dateofbirththree{1 September 1987}
+\placeofbirththree{Bangkok, Thailand}
+\firstdegreethree{High School Diploma}
+\firstdegreeinstitutionthree{Triamudomsuksa Pattanakarn School}
+\firstdegreeyearsthree{2006}
+\yearsthree{2010}
+
+% Start the document
+%-----------------------------------------------------------------------------
+
+\begin{document}
+\maketitle
+
+%  importing  Acknowledge, English Abstract, and Thai Abstract files
+\input{ack}
+\input{abstractEng}
+\input{abstractThai}
+
+% For  table of Contents
+\linespacing{1.2}
+\tableofcontents
+%\listoftables
+\listoffigures
+
+%  importing Chapters
+\setlength{\parindent}{0.5in}
+\linespacing{1.77}
+\input{chap1}
+\input{chap2}
+\input{chap3}
+\input{chap4}
+\input{chap5}
+\input{chap6}
+
+% importing appendix (optional)
+\appendix
+\addcontentsline{toc}{chapter}{APPENDIX}
+\input{appendixA}
+%\input{appendixB}
+
+
+% importing reference file
+\bibliographystyle{plain}
+
+\bibliography{reference}
+\biography
+
+\end{document}
